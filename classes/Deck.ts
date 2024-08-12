@@ -92,10 +92,9 @@ export class Deck {
 
   public static Draw(): ComponentCard {
     if (this.deck.length === 0) {
-      const discardedPile = DiscardedPile.Instance;
-      discardedPile.Shuffle();
-      this.deck = discardedPile.pile;
-      discardedPile.Clear();
+      DiscardedPile.Shuffle();
+      this.deck = DiscardedPile.pile;
+      DiscardedPile.Clear();
     }
     return this.deck.pop() as ComponentCard;
   }

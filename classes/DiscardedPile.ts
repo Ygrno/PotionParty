@@ -5,15 +5,15 @@ export class DiscardedPile {
 
   private constructor() {}
 
-  public Throw(card: ComponentCard): void {
+  public static Throw(card: ComponentCard): void {
     DiscardedPile.pile.push(card);
   }
 
-  public get Length(): number {
+  public static get Length(): number {
     return DiscardedPile.pile.length;
   }
 
-  public Shuffle(): void {
+  public static Shuffle(): void {
     for (let i = DiscardedPile.pile.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [DiscardedPile.pile[i], DiscardedPile.pile[j]] = [
@@ -23,7 +23,7 @@ export class DiscardedPile {
     }
   }
 
-  public Clear(): void {
+  public static Clear(): void {
     DiscardedPile.pile = [];
   }
 }
