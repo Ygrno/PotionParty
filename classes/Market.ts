@@ -12,7 +12,6 @@ export class Market {
   }
 
   //End of turn functions:
-
   public static Restock(): void {
     // If there are less than 6 cards in the storage, draw cards from the deck
     while (Market.storage.length < 6) {
