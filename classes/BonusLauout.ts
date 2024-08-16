@@ -1,9 +1,10 @@
-import { CardType } from "../Globals";
 import {
   AllFiveTypesCard,
   BonusCard,
+  Card,
+  ComponentCard,
   FourIngredientsCard,
-  MixedPotion,
+  CardType,
   ThreeConsecutive,
   ThreeOfSameTypeCard,
   TwoPotionsCard,
@@ -27,56 +28,28 @@ export class BonusLayout {
     BonusLayout.BonusCards.push(new AllFiveTypesCard());
   }
 
-  static removeBonusCard(request: string): void {
-    switch (request) {
-      case "SPIDERS":
-        BonusLayout.BonusCards = BonusLayout.BonusCards.filter(
-          (card) => card.type !== CardType.SPIDERS
-        );
-        break;
-      case "EYES":
-        BonusLayout.BonusCards = BonusLayout.BonusCards.filter(
-          (card) => card.type !== CardType.EYES
-        );
-        break;
-      case "LIZARDS":
-        BonusLayout.BonusCards = BonusLayout.BonusCards.filter(
-          (card) => card.type !== CardType.LIZARDS
-        );
-        break;
-      case "MUSHROOMS":
-        BonusLayout.BonusCards = BonusLayout.BonusCards.filter(
-          (card) => card.type !== CardType.MUSHROOMS
-        );
-        break;
-      case "WORMS":
-        BonusLayout.BonusCards = BonusLayout.BonusCards.filter(
-          (card) => card.type !== CardType.WORMS
-        );
-        break;
-      case "TwoPotions":
-        BonusLayout.BonusCards = BonusLayout.BonusCards.filter(
-          (card) => !(card instanceof TwoPotionsCard)
-        );
-        break;
-      case "ThreeConsecutive":
-        BonusLayout.BonusCards = BonusLayout.BonusCards.filter(
-          (card) => !(card instanceof ThreeConsecutive)
-        );
-        break;
-      case "ThreeOfSameType":
-        BonusLayout.BonusCards = BonusLayout.BonusCards.filter(
-          (card) => !(card instanceof ThreeOfSameTypeCard)
-        );
-        break;
-      case "AllFiveTypes":
-        BonusLayout.BonusCards = BonusLayout.BonusCards.filter(
-          (card) => !(card instanceof AllFiveTypesCard)
-        );
-        break;
-        break;
-      default:
-        throw new Error("Invalid request");
+  static checkConditionMet(
+    playerCards: ComponentCard[],
+    playerStorage: Card[]
+  ): BonusCard[] {
+    let conditionMet: boolean = false;
+    let returnedCards: BonusCard[] = [];
+
+    for (const card of BonusLayout.BonusCards) {
+      if (card.checkCondition(playerCards, playerStorage)) {
+        conditionMet = true;
+        returnedCards.push(card);
+      }
     }
+
+    return returnedCards;
+  }
+
+  static removeBonusCard(bonusCard: BonusCard): void {
+    const index = BonusLayout.BonusCards.indexOf(bonusCard);
+    if (index === -1) {
+      throw new Error("Bonus card not found");
+    }
+    BonusLayout.BonusCards.splice(index, 1);
   }
 }

@@ -1,5 +1,4 @@
-import { CardType } from "../Globals";
-import { MixedPotion, PotionCard } from "./Card";
+import { CardType, ComponentCard, MixedPotion, PotionCard } from "./Card";
 
 export class PotionLayout {
   public static SpiderPotions: PotionCard[] = [];
@@ -19,6 +18,18 @@ export class PotionLayout {
       PotionLayout.WormsPotions.push(new PotionCard(CardType.WORMS, i));
     }
     PotionLayout.MixedPotion.push(new MixedPotion());
+  }
+
+  static checkConditionMet(
+    playerCards: ComponentCard[],
+    potionCard: PotionCard
+  ): boolean {
+    // Check if the potion is available
+    if (!PotionLayout.getAllCurrentPotions().includes(potionCard)) {
+      return false;
+    }
+
+    return potionCard.checkCondition(playerCards);
   }
 
   static getAllCurrentPotions(): PotionCard[] {

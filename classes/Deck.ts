@@ -1,5 +1,4 @@
-import { ComponentCard } from "./Card";
-import { CardType } from "../Globals";
+import { CardType, ComponentCard } from "./Card";
 import { DiscardedPile } from "./DiscardedPile";
 
 export class Deck {
