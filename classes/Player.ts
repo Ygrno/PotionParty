@@ -93,7 +93,7 @@ export class Player {
     this.addToStorage(potion);
 
     // Check if the player won bonus cards
-    let bonusCards = BonusLayout.checkConditionMet(playerCards, this.storage);
+    const bonusCards = BonusLayout.checkConditionMet(playerCards, this.storage);
     bonusCards.forEach((card) => {
       this.storage.push(card);
       BonusLayout.removeBonusCard(card);

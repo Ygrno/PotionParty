@@ -11,7 +11,7 @@ export enum CardType {
   UNKNOWN,
 }
 
-export class Card {
+export abstract class Card {
   id: number;
   type: CardType;
   private turnPlayed: number;
@@ -23,9 +23,7 @@ export class Card {
     this.type = CardType.UNKNOWN;
   }
 
-  render(): void {
-    // Implement the rendering logic for the card here
-  }
+  abstract render(): void;
 
   setTurnPlayed(turn: number): void {
     this.turnPlayed = turn;
@@ -68,8 +66,8 @@ export class PotionCard extends Card {
       return false;
     }
 
-    let types = playerCards.map((card) => card.type);
-    let uniqueTypes = new Set(types);
+    const types = playerCards.map((card) => card.type);
+    const uniqueTypes = new Set(types);
     if (uniqueTypes.size !== 1 || types[0] !== this.type) {
       return false;
     }
@@ -107,20 +105,18 @@ export class MixedPotion extends PotionCard {
   }
 }
 
-export class BonusCard extends Card {
+export abstract class BonusCard extends Card {
   constructor(type: CardType) {
     super();
     this.type = type;
   }
 
-  checkCondition(playerCards: ComponentCard[], playerStorage: Card[]): boolean {
-    // Implement the logic for checking the condition of the bonus card here
-    return false;
-  }
+  abstract checkCondition(
+    playerCards?: ComponentCard[],
+    playerStorage?: Card[]
+  ): boolean;
 
-  render(): void {
-    // Implement the rendering logic for the bonus card here
-  }
+  abstract render(): void;
 }
 
 export class FourIngredientsCard extends BonusCard {
@@ -132,11 +128,11 @@ export class FourIngredientsCard extends BonusCard {
     // Implement the rendering logic for the four ingredients card here
   }
 
-  checkCondition(playerCards: ComponentCard[], playerStorage: Card[]): boolean {
+  checkCondition(playerCards: ComponentCard[]): boolean {
     let conditionMet = false;
     if (playerCards.length === 4) {
-      let types = playerCards.map((card) => card.type);
-      let uniqueTypes = new Set(types);
+      const types = playerCards.map((card) => card.type);
+      const uniqueTypes = new Set(types);
       if (uniqueTypes.size === 1 && types[0] === this.type) {
         conditionMet = true;
       }
@@ -154,9 +150,12 @@ export class TwoPotionsCard extends BonusCard {
     super(CardType.BONUS);
   }
 
-  checkCondition(playerCards: ComponentCard[], playerStorage: Card[]): boolean {
+  checkCondition(
+    _playerCards: ComponentCard[],
+    playerStorage: Card[]
+  ): boolean {
     let count = 0;
-    for (let card of playerStorage) {
+    for (const card of playerStorage) {
       if (
         card.getTurnPlayed() === GameSession.turn &&
         card instanceof PotionCard
@@ -184,10 +183,13 @@ export class ThreeConsecutive extends BonusCard {
     super(CardType.BONUS);
   }
 
-  checkCondition(playerCards: ComponentCard[], playerStorage: Card[]): boolean {
-    let potionCards: PotionCard[] = [];
+  checkCondition(
+    _playerCards: ComponentCard[],
+    playerStorage: Card[]
+  ): boolean {
+    const potionCards: PotionCard[] = [];
 
-    for (let card of playerStorage) {
+    for (const card of playerStorage) {
       if (card instanceof PotionCard) {
         potionCards.push(card);
       }
@@ -225,17 +227,20 @@ export class ThreeOfSameTypeCard extends BonusCard {
     super(CardType.BONUS);
   }
 
-  checkCondition(playerCards: ComponentCard[], playerStorage: Card[]): boolean {
-    let potionCards: PotionCard[] = [];
+  checkCondition(
+    _playerCards: ComponentCard[],
+    playerStorage: Card[]
+  ): boolean {
+    const potionCards: PotionCard[] = [];
 
-    for (let card of playerStorage) {
+    for (const card of playerStorage) {
       if (card instanceof PotionCard) {
         potionCards.push(card);
       }
     }
 
-    let histogram = new Map<CardType, number>();
-    for (let card of potionCards) {
+    const histogram = new Map<CardType, number>();
+    for (const card of potionCards) {
       if (histogram.has(card.type)) {
         histogram.set(card.type, (histogram.get(card.type) ?? 0) + 1);
       } else {
@@ -243,7 +248,7 @@ export class ThreeOfSameTypeCard extends BonusCard {
       }
     }
 
-    for (let count of histogram.values()) {
+    for (const count of histogram.values()) {
       if (count >= 3) {
         return true;
       }
@@ -266,9 +271,12 @@ export class AllFiveTypesCard extends BonusCard {
     super(CardType.BONUS);
   }
 
-  checkCondition(playerCards: ComponentCard[], playerStorage: Card[]): boolean {
-    let types = new Set();
-    for (let card of playerStorage) {
+  checkCondition(
+    _playerCards: ComponentCard[],
+    playerStorage: Card[]
+  ): boolean {
+    const types = new Set();
+    for (const card of playerStorage) {
       if (card instanceof PotionCard) {
         types.add(card.type);
       }

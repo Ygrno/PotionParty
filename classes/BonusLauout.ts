@@ -32,12 +32,10 @@ export class BonusLayout {
     playerCards: ComponentCard[],
     playerStorage: Card[]
   ): BonusCard[] {
-    let conditionMet: boolean = false;
-    let returnedCards: BonusCard[] = [];
+    const returnedCards: BonusCard[] = [];
 
     for (const card of BonusLayout.BonusCards) {
       if (card.checkCondition(playerCards, playerStorage)) {
-        conditionMet = true;
         returnedCards.push(card);
       }
     }
