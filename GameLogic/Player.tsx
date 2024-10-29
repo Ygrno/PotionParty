@@ -2,9 +2,10 @@ import { BonusLayout } from "./BonusLauout";
 import { Card, ComponentCard, PotionCard } from "./Card";
 import { Deck } from "./Deck";
 import { DiscardedPile } from "./DiscardedPile";
-import { GameSession } from "./GameSession";
 import { Market } from "./Market";
 import { PotionLayout } from "./PotionLayout";
+
+import { GameSession } from "./GameSession";
 
 export class Player {
   name: string;
